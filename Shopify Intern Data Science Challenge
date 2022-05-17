@@ -1,0 +1,62 @@
+# Question 2a
+SELECT *
+FROM Shippers
+LEFT JOIN Orders
+ON Shippers.ShipperID = Orders.ShipperID
+WHERE Orders.ShipperID = 1;
+Answer = 54
+
+
+# Question 2b
+SELECT LastName, COUNT(Employees.EmployeeID)
+FROM Employees
+LEFT JOIN Orders
+ON Employees.EmployeeID = Orders.EmployeeID
+GROUP BY LastName
+Answer = Peacock
+
+
+# Question 2c
+SELECT ProductName, SUM(Quantity) FROM(
+SELECT O.OrderID, C.CustomerName, C.Country, P.ProductName, OD.Quantity
+FROM Orders O
+JOIN [Customers] C
+ON C.CustomerID = O.CustomerID
+JOIN [OrderDetails] OD
+ON O.OrderID = OD.OrderID
+JOIN [Products] P
+ON P.ProductID = OD.ProductID
+WHERE Country = 'Germany') AS sub 
+GROUP BY ProductName
+ORDER BY SUM(Quantity) DESC
+LIMIT 1
+
+# Question 1
+I imported pandas for the purpose of reading the dataset into pandas DataFrame. 
+I used the aggregate function describe to see the statistical summary of the whole dataset.
+The summary informed us that the average order value (mean) is 3145.13 just as described earlier.
+
+a. Our average order value(mean) was wrong because it didnt take into consideration the number of unique users. 
+The total amount of all orders divided by the number of unique users gives us the true Average order value
+because such analysis takes into account the real number of unique users as opposed to describe function that gives
+5000 as the count of unique number of users.
+
+b. The metric to be reported for this dataset is dollars($)
+
+c. $52244.65
+
+# CODES
+import pandas as pd
+dt1 = pd.read_csv('2019 Winter Data Science Intern Challenge Data Set - Sheet1.csv')
+dt1.describe()
+dt1.isnull().sum()
+sum = dt1['order_amount'].sum() #sum of order amount
+sum
+# counting unique user_id
+n = len(pd.unique(dt1['user_id']))
+  
+print("No.of.unique user_id :", 
+      n)
+#Average order Value = sum/n
+print(sum/n)
+
